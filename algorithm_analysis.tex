@@ -1,4 +1,56 @@
 \section{Algorithm Analysis}
 
 % \subsection{Proving Correctness of Algorithms}
-% \subsection{Stable Matching Problem}
+\subsection{Stable Matching Problem}
+
+\paragraph{Hospital's Stable Matching Problem}
+Suppose there exists \(n\) doctors and hospital. Each hospital wants to
+hire exactly one new doctor and the hospital ranks the priority of the
+doctors they would prefer and each doctor also lists their preferences for
+the hospitals they'd like to go to.
+
+For a stable match, we would like to create an allocation where no group
+would be happy to trade their allocations with each other.
+
+\paragraph{Naive Solution}
+The naive method computes all possible allocations and then picks one that
+is stable.
+
+This runs in \(O(n!)\) time which is not preferable.
+
+\subparagraph{Fun Fact about Factorials - Sterling's Approximation}
+\[n! \approx \left(\frac{n}{e}\right)^n\]
+
+\paragraph{Gale - Shapely Algorithm - Assumptions}
+\begin{itemize}
+    \item Produces pairs in stages, with possible revisions.
+    \item A hospital which has not been paired, will be called \textit{free}.
+    \item Hospitals will offer jobs to doctors, who will decide whether to
+    accept a job or not. Doctors may renege.
+    \item All hospitals start off as free.
+\end{itemize}
+
+\paragraph{Gale - Shapely - Solution}
+
+While there exists a free hospital which has not offered jobs to all doctors,
+pick a free \(h\) and have it offer a job to the highest doctor \(d\) on its list to whom they have not offered a job yet.
+
+If no one has offered \(d\) a job yet, they will always aspect the pair \(h, d\).
+
+Otherwise, if they're already on the pair \(h', d\) then if \(h\) is a higher preference than \(h'\) the doctor will renege \(h'\) for \(h\) to form \((h, d)\). Otherwise, the hospital will seek another person to offer a job.
+
+\paragraph{Proving Termination in \(n^2\)}
+In all rounds of the Gale-Shapely algorithm, the hospital will offer a job to one doctor. They may offer a job to each doctor only once. Thus, the hospital may only make \(n\) offers. There are \(n\) hospitals each making \(n\) offers so, the algorithm must terminate in \(n^2\) rounds or less.
+
+\paragraph{Proving Correctness of Gale-Shapely}
+
+If the while loop has terminated with \(h\) still free, that implies that
+\(h\) has offered a job to everyone. Since the only way to get declined is
+if another, more appealing hospital has offered a job to other doctors.  
+
+If there are no more doctors available, then \(n\) other hospitals must
+have offered a job to \(n\) doctors. However this would imply there are
+\(n + 1\) hospitals in total, which is a contradiction.
+
+Hospitals will be happy as they start with their highest preference first and,
+doctors will move up to accept their most preferred offer. Thus, there cannot exists a circumstance where both a hospital and doctor would like to swap.
