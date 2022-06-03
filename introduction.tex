@@ -1,3 +1,54 @@
 
+\section{Introduction - Revision}
+
+\subsection{Rates of Growth}
+
+\paragraph{The Problem}
+
+To analyse algorithms, we need a way to compare two functions representing
+the runtime of each algorithm. However, comparing values directly presents a few issues.
+\begin{itemize}
+    \item Outliers may affect the results.
+    \item One algorithm may be slower for a set period of time, but catch
+    up after a while.
+    \item The runtime of an algorithm may vary depending on the
+    implementation or the architecture of the machine where, some
+    instructions are faster than others.
+\end{itemize}
+
+\paragraph{Asymptotic Growth}
+For algorithms, we often prefer to refer to them in terms of their
+asymptotic growth in runtime, with relation to the input size.
+
+A function that quadruples with every extra input will always have a
+greater runtime than one that increases linearly with each new input, for
+some large enough input size.
+
+\paragraph{Big \(O\) Notation}
+We say \(f(n) = O(g(n))\) if there exists a positive constants \(C, N\)
+such that
+\[
+    0 \leq f(n) \leq C g(n) \quad \forall n \geq N.
+\]
+
+We may refer to \(g(n)\) to be the asymptotic upper bound for \(f(n)\).
+
+\paragraph{Big Omega Notation}
+We say \(f(n) = \Omega(g(n))\) if there exists positive constants \(c, N\) such that 
+\[0 \leq c g(n) \leq f(n) \quad \forall n \geq N.\]
+
+Then, \(g(n)\) is said to be an asymptotic lower bound for \(f(n)\).
+It is useful to say that a problem is at least \(\Omega(g(n))\).
+
+\paragraph{Landau Notation}
+\(f(n) = \Omega (g(n))\) if and only if \(g(n) = O(f(n))\).
+
+There are strict version of Big \(O\) and Big \(Omega\) notations; these are little \(o\) and little \(\omega\) respectively.
+
+We say \(f(n) = \Theta(g(n))\) if
+\[
+    f(n) = O(g(n)) \text{ and } f(n) = \Omega(g(n)).
+\]
+That is, both \(f\) and \(g\) have the same asymptotic growth.
 
 
