@@ -52,3 +52,65 @@ We say \(f(n) = \Theta(g(n))\) if
 That is, both \(f\) and \(g\) have the same asymptotic growth.
 
 
+\paragraph{Logarithms}
+Logarithms are defined so that for \(a, b > 0\) where \(n \neq 1\),
+let \[ n = \log_a b \Leftrightarrow a^n = b.\]
+
+They have the following properties:
+\begin{itemize}
+    \item \(a^{\log_a n} = n\)
+    \item \(\log_a (mn) = \log_a (m) + \log_a(n)\)
+    \item \(\log_a (n^k) = k\log_a (n)\)
+\end{itemize}
+
+By the change of base,
+\[
+    \log_a(x) = \frac{\log_b (x)}{\log_b (a)}.
+\]
+As such, the denominator is constant in terms of \(x\) and so all log bases are equivalent under Big Theta notation.
+
+\subsection{Assumed Data Structures}
+
+\paragraph{Arrays}
+We assume static arrays (though, it is possible to extend to dynamic arrays).
+
+\begin{itemize}
+    \item We assume random-access in \(O(1)\)
+    \item Insert / delete \(O(n)\)
+    \item Search: \(O(n)\) - \(\log n\) if sorted
+\end{itemize}
+
+\paragraph{Linked Lists}
+We assume the linked lists are doubly-linked since the \()2\times \)  overhead is negligible.
+
+\begin{itemize}
+    \item Accessing next / previous: \(O(1)\)
+    \item Insert / delete to head or tail: \(O(1)\)
+    \item Search: \(O(1)\).
+\end{itemize}
+
+\paragraph{Stacks}
+Last in, first out.
+\begin{itemize}
+    \item Accessing top: \(O(1)\)
+    \item Insert / delete from top: \(O(1)\)
+\end{itemize}
+
+\paragraph{Queue}
+First in, first out.
+\begin{itemize}
+    \item Access front: \(O(1)\)
+    \item Insert front: \(O(1)\)
+    \item Delete front: \(O(1)\)
+\end{itemize}
+
+\paragraph{Hash Tables}
+Store values by their hashed keys.
+Ideally, no two keys will hash to the same value, however this may not be guaranteed.
+
+\begin{itemize}
+    \item Search is expected to be \(O(1)\) however, in the worst case, we expect to have to search through all the values in \(O(n)\).
+    \item Insertion is expected to be \(O(1)\) however, in the worst case, we expect to have to search through all the values in \(O(n)\).
+    \item Deletion follows the same pattern of \(O(1)\) expectation and \(O(n)\) worst case.
+\end{itemize}
+
