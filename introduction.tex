@@ -6,7 +6,8 @@
 \paragraph{The Problem}
 
 To analyse algorithms, we need a way to compare two functions representing
-the runtime of each algorithm. However, comparing values directly presents a few issues.
+the runtime of each algorithm. However, comparing values directly presents
+a few issues.
 \begin{itemize}
     \item Outliers may affect the results.
     \item One algorithm may be slower for a set period of time, but catch
@@ -34,7 +35,8 @@ such that
 We may refer to \(g(n)\) to be the asymptotic upper bound for \(f(n)\).
 
 \paragraph{Big Omega Notation}
-We say \(f(n) = \Omega(g(n))\) if there exists positive constants \(c, N\) such that 
+We say \(f(n) = \Omega(g(n))\) if there exists positive constants \(c, N\)
+such that 
 \[0 \leq c g(n) \leq f(n) \quad \forall n \geq N.\]
 
 Then, \(g(n)\) is said to be an asymptotic lower bound for \(f(n)\).
@@ -43,7 +45,8 @@ It is useful to say that a problem is at least \(\Omega(g(n))\).
 \paragraph{Landau Notation}
 \(f(n) = \Omega (g(n))\) if and only if \(g(n) = O(f(n))\).
 
-There are strict version of Big \(O\) and Big \(Omega\) notations; these are little \(o\) and little \(\omega\) respectively.
+There are strict version of Big \(O\) and Big \(Omega\) notations; these
+are little \(o\) and little \(\omega\) respectively.
 
 We say \(f(n) = \Theta(g(n))\) if
 \[
@@ -81,7 +84,8 @@ We assume static arrays (though, it is possible to extend to dynamic arrays).
 \end{itemize}
 
 \paragraph{Linked Lists}
-We assume the linked lists are doubly-linked since the \()2\times \)  overhead is negligible.
+We assume the linked lists are doubly-linked since the \(2\times \)
+overhead is negligible.
 
 \begin{itemize}
     \item Accessing next / previous: \(O(1)\)
@@ -105,12 +109,64 @@ First in, first out.
 \end{itemize}
 
 \paragraph{Hash Tables}
-Store values by their hashed keys.
-Ideally, no two keys will hash to the same value, however this may not be guaranteed.
+Store values by their hashed keys. Ideally, no two keys will hash to the
+same value, however this may not be guaranteed.
 
 \begin{itemize}
-    \item Search is expected to be \(O(1)\) however, in the worst case, we expect to have to search through all the values in \(O(n)\).
-    \item Insertion is expected to be \(O(1)\) however, in the worst case, we expect to have to search through all the values in \(O(n)\).
+    \item Search is expected to be \(O(1)\) however, in the worst case, we
+    expect to have to search through all the values in \(O(n)\).
+    \item Insertion is expected to be \(O(1)\) however, in the worst case,
+    we expect to have to search through all the values in \(O(n)\).
     \item Deletion follows the same pattern of \(O(1)\) expectation and \(O(n)\) worst case.
 \end{itemize}
 
+\paragraph{Binary Search Trees}
+We store (comparable) keys (or key-value pairs) in a binary tree, where
+each node has at most two children, the left and right. The value of a node
+must be greater than the values of all its children in its left sub-tree
+and greater than those in the right sub-tree.
+\begin{itemize}
+    \item In the best case, the height of the tree is \(h = \log_2 n\).
+    Such a tree is \textit{balanced}. in the worst case however, the tree
+    is a long chain of height \(n\).
+    \item The average search is \(\log n\). If the tree is self-balancing
+    then search and other operations are guaranteed to be i \(\log n\).
+\end{itemize}
+
+\paragraph{Binary Heap}
+A max-heap is such that the value of a node is greater than or, equal to
+the value of all its children. A min-heap follows the same principle but in
+reverse.
+
+\begin{itemize}
+    \item Finding the maximum involves finding the top item in \(O(1)\)
+    \item Deleting the top item will also require re-balancing.
+    \item Re-balancing the heap requires \(\log n\) time.
+    \item Insertion also requires \(\log_n\) time.
+\end{itemize}
+
+\subsection{Algorithms}
+
+\paragraph{Linear Search}
+Given an array \(A\) of \(n\) integers. We may determine if a value is inside
+\(A\), by searching through the array linearly. This occurs in \(O(n)\).
+
+
+\paragraph{Sorted Arrays - Binary Search}
+Given a sorted array \(A\) of \(n\) integers that are sorted by value. We
+may determine if a value is inside \(A\), by binary search. We pick the
+midpoint of the \(A\). If the midpoint \(m\) is the value desired, we
+return. Otherwise, we continue to recursively search through the array by
+halving the search space. If the \(m\) is greater than the value we desire,
+then we search the right sub-array of the array; otherwise, we search the
+left sub-array of the array
+
+\paragraph{Decision Problems and Optimisation Problems}
+Decision problems are of the form
+\[\text{Given some parameters \(X\), can you \dots}\]
+Optimisation problems are of the form
+\[\text{What is the smallest \(X\) for which you can \dots}\]
+
+\paragraph{Comparison Sorting}
+We are given an array of \(n\) items. We may sort the array in \(O(n\log n)\)
+at best.
