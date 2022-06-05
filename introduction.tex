@@ -170,3 +170,48 @@ Optimisation problems are of the form
 \paragraph{Comparison Sorting}
 We are given an array of \(n\) items. We may sort the array in \(O(n\log n)\)
 at best.
+
+\paragraph{Asymptotic Lower Bound on Comparison Sorting}
+
+There are \(n!\) permutations of the array, of which there is \(1\) correct sort.
+If we do \(k\) comparisons, then we are able to check \(2^k\) permutations of results from these comparisons and so, can at most, distinguish \(2^k\) permutation.
+
+Thus, we need to perform comparisons such that 
+\(2^k \geq n!\).
+That is,
+\(k\geq \log_2 (n!)\).
+Therefore, \[
+    k \geq \frac{n}{2}\log_2 \left(\frac{n}{2}\right)
+\]
+
+\subsection{Non-Comparison Sort}
+
+\paragraph{Counting Sort}
+Create another array \(B\) of size \(k\) where \(k\) is 
+the maximum size of an element.
+We iterate through the array and count the number of times each element occurs, iterating the index of \(B\) that is equivalent to the value of our current element.
+
+The time complexity is \(O(n + k)\) where \(O(k)\) space is required.
+
+\paragraph{Bucket Sort}
+
+Distribute the items into buckets \(1, \dots, k\) such that each bucket contains a range of items such that all items in bucket \(1\) are less than all the items in bucket \(2\) and so on. We may sort within that bucket with any algorithm and then concatenate all the buckets together.
+
+\paragraph{Radix Sort}
+We assume an array \(A\) of \(n\) keys, of \(k\) symbols.
+
+We bucket the keys by their first symbol. Then, within each bucket we  also classify those items by the next symbol recursively.
+This happens in \(O(nk)\).
+
+\paragraph{LSD Radix Sort}
+Sort all keys by their last symbol, then sort all keys by their second last symbol, and so on.
+The sorting algorithm at each stage must be stable.
+
+% !TODO: Finish
+
+The time is \(O(nk)\) with space complexity of \(O(n + k)\).
+
+\subsection{Graphs}  
+
+
+
