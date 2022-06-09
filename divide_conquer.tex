@@ -23,5 +23,38 @@ from \(A\), we add the number of elements remaining in \(A_{\lo}\)
 to the total number of inversions as, all of those elements are greater than
 our current element from \(A_{\hi}\) but to the left of our current element.
 
-% \subsection{The Master Theorem}
+\paragraph{Time Complexity of Divide and Conquer Method}
+The divide and conquer method will the same time complexity as
+merge sort and thus runs in \(\Theta (n)\).
+
+\subsection{The Master Theorem}
+
+
+\paragraph{Setup Master Theorem}
+Let \(a \geq 1\)  be and integer and \(b > 1\) be a real number,
+\(f(n) > 0\) be a non-decreasing function defined on the positive integers.
+Then, \(T(n)\) is the solution of the recurrence
+\[
+    T(n) = a T\left( \frac{n}{b} \right) + f(n).
+\]
+
+Then, we define the critical exponent \(C^* = \log_b(a)\) 
+and the critical polynomial \(n^{c^*}\).
+
+\paragraph{Master Theorem}
+\begin{enumerate}
+    \item If \(f(n) = O(n^{c^*})\) for some \(\epsilon > 0\) then,
+    \(T(n) = \Theta(n^{c^*})\).
+    \item If \(f(n) = \Theta(n^{c^*})\) then,
+    \(T(n) = \Theta (n^{c^*})\log n\).
+    \item  If \(f(n) = \Omega(n^{c^* + \epsilon})\) for some \(\epsilon > 0\)
+    and, for some \(c < 1\), and some \(n_0\),
+    \[a f(\frac{n}{b}) \leq c f(n)\]
+    holds for all \(n > n_0\) then, \(T(n) = \Theta(f(n))\).
+\end{enumerate}
+
+If the conditions above do not hold then, the master theorem is not
+applicable.
+
+
 % \subsection{Applications of the master Theorem: median of medians}
