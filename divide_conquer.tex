@@ -1,7 +1,27 @@
 
-% \section{Divide-and-Conquer Method}
+\section{Divide-and-Conquer Method}
 
 % \subsection{Asymptotic behavior, recurrences, summations, estimations}
 % \subsection{Weighing coins}
+\subsection{Counting Inversions}
+
+\paragraph{Brute Force}
+Brute force will take \(O(n^2)\) time. Any method of looking at entries
+one by one will have have at worst, a quadratic time complexity
+since there can be \(\frac{n^2}{2}\) inversions.
+
+\paragraph{Divide and Conquer Method}
+We can split the array into two equal parts \(A_{\hi}\) and \(A_{\lo}.\)
+
+Then, for all of the elements in \(A_{\hi}\) and the total inversions is
+the number of elements in \(A_{\lo}\) that are less than the elements of
+\(A_{\hi}\).
+
+We may sort both \(A_{\hi}\) and \(A_{\lo}\).
+Then, we seek to merge the arrays together. Every time we pull an element
+from \(A\), we add the number of elements remaining in \(A_{\lo}\)
+to the total number of inversions as, all of those elements are greater than
+our current element from \(A_{\hi}\) but to the left of our current element.
+
 % \subsection{The Master Theorem}
 % \subsection{Applications of the master Theorem: median of medians}
