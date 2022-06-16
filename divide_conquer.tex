@@ -56,5 +56,15 @@ and the critical polynomial \(n^{c^*}\).
 If the conditions above do not hold then, the master theorem is not
 applicable.
 
+\subsection{Integer Multiplication and Addition}
+
+\paragraph{Notation and Basic Methodology}
+We let \(n\) be the number of bits in the integer.
+Addition occurs by moving from the least to most significant bit, adding each
+bit at a time in \(\Theta (n)\). Multiplication is much of the same but,
+in \(O(n^2)\).
+
+\paragraph{The Karatsuba Trick}
+This happens in \(O(n^{\log_2 3})\).
 
 % \subsection{Applications of the master Theorem: median of medians}

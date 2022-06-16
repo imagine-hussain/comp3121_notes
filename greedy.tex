@@ -1,8 +1,40 @@
 
-% \section{The Greedy Method}
+\section{The Greedy Method}
 
-% \subsection{When greed pays off - foundations of the Greedy Method}
-% \subsection{Activity Selection problem}
+\subsection{When greed pays off - foundations of the Greedy Method}
+
+\paragraph{What is a Greedy Problem}
+A greedy algorithm will divide a problem into stages and rather than exhaustively
+searching through all combinations of options in all stages, it only
+considers the choice that is the best for the current stage.
+
+The idea is that the search space is reduced however, it is not
+necessarily given that the solution is found using a greedy point.
+
+\paragraph{Proofs of Greedy Algorithm}
+There are two main methods of proof.
+\begin{enumerate}
+    \item \textbf{Greedy Stays Ahead:} This proves that at every stage,
+    no other algorithm can do better than the proposed algorithm.
+    \item \textbf{Exchange Argument:} Consider an optimal solution and
+    gradually transform it to the solution found by the proposed algorithm
+    without making it any worse.
+\end{enumerate}
+These methods are analogous to proof by induction and contradiction
+respectively.
+
+\subsection{Activity Selection problem}
+\paragraph{Problem Statement}
+There is a list of \(n\) activities with starting times \(s_i\).
+and finishing time \(f_i\). Schedule the activities such that no two
+activities overlap. Maximise for the total number of activities.
+
+\paragraph{Solution}
+Among the activities that do not conflict with the previously chosen
+activities, choose the activity with the earliest end-time.
+Ties may be broken arbitrarily.
+
+
 % \subsection{Discrete (0–1) Knapsack Problem}
 % \subsection{File compression: Huffman Codes}
 % \subsection{Directed acyclic graphs and topological sorting}
