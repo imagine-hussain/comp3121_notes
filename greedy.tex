@@ -34,9 +34,53 @@ Among the activities that do not conflict with the previously chosen
 activities, choose the activity with the earliest end-time.
 Ties may be broken arbitrarily.
 
+\paragraph{Proof}
+Correctness is proved with the \textit{exchange argument} to show that
+any optimal solution can be transformed into our greedy solution.
+\begin{enumerate}
+    \item Find the first place at which the optimal solution violates
+    the greedy choice.
+    \item Replace the activity chose with the greedy choice.
+    Clearly, the number of activities is the same.
+    Also, we know there are no conflicts that have been created because,
+    we are working left-to-right and have chosen the first conflict.
+    So, no conflict happens before the start of the greedy's choice.
+    Also, the finish time of greedy is no greater than the finish
+    time of the optimal solution. As such, there is no conflict
+    on the right-side of the greedy choice either.
+\end{enumerate}
+
+\paragraph{Complexity}
+We can sort using the finishing time as the key in \(n\log n\).
+Then, loop through all the activities linearly for a total
+time of \(O(n \log n)\).
+
 
 % \subsection{Discrete (0–1) Knapsack Problem}
 % \subsection{File compression: Huffman Codes}
 % \subsection{Directed acyclic graphs and topological sorting}
 % \subsection{Dijkstra's algorithm}
 % \subsection{Minimum spanning trees}
+
+% \subsection{Cell Towers}
+
+% \paragraph{Problem}
+
+% \paragraph{}
+
+\subsection{Job Lateness}
+\paragraph{Problem}
+At a start time \(T_0\) and a list of \(n\) jobs with duration times
+\(t_i\) and deadlines \(t_i\).
+
+Assume that only one job can be done at a time and all jobs need to
+be completed
+
+\paragraph{Solution}
+Ignore the duration. Then, choose jobs in terms of ascending deadlines.
+
+\paragraph{Proof}
+Consider an optimal solution.
+We say \(i, j\) is an inversion if \(i\) is scheduled before
+\(j\) but, \(j\) is scheduled after \(i\).
+
