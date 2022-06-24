@@ -100,3 +100,100 @@ to that character. Given \(n\) characters, you require
 bits.
 Wastes lots of space.
 
+\subsection{Tsunami Warning}
+
+\paragraph{Situation}
+There are \(n\) radio towers to broadcast tsunami warnings.
+You are given the \((x, y)\) coordinates of each tower and its
+radius of range. When a tower is activated, all towers within that radius
+will also activate, causing other towers to activate andso on.
+
+\paragraph{Task}
+Design and algorithm to ind the fewest number of towers needed to be equipped
+
+\paragraph{Attempt 1 - Bad}
+Find activated tower with the largest radius. Place a sensor at this tower.
+Then find and remoe all activated towers. Repeat.
+\paragraph{Attempt 2 - Bad}
+Find unactivated tower with largest number of towers in range. If none, place
+a sensor at the left-most tower. Repeat.
+
+\paragraph{Motivation}
+Consider the towers as nodes on a directed graph where an edge \(a_{ij}\)
+implies \(i\) causes an activation of \(j\). Observe that the relation is
+symmetric.
+
+Suppose that a tower \(a\) causes \(b\) to be activated and vice-versa.
+Then, we never want to activate \(a\) and \(b\). Consequently,
+we never want to activate more than two elements in a cycle.
+
+Let \(S\) be a subset of towers such that activating any tower in \(S\)
+causes the activation of all towers in \(S\). As such, we may treat \(S\) 
+as a singular unit; a super-tower.
+
+\paragraph{Strongly Connected Components}
+Given a directed graph \(G = (V, E)\) and a vertex \(v\), the strogly connected
+components of \(G\) containing \(v\) consists of all vertices
+\(u \in  V\) such that there is a path in \(G\) from \(v\) to \(u\) and a path
+from \(u\) to \(v\). We denote this as \(C_v\).
+In terms of our problem, strongly connected components are maximal
+super-towers.
+
+\paragraph{Finding Strongly Connected Components}
+Given a graph \(G = V, E\), create \(G' = (V, E')\) so that
+\(E'\) has all edges reversed from \(E\).)
+
+We claim that \(u \in C_v\) iff and only if \(u\) is reachable from \(v\)
+and \(v\) is reachible from \(u\). Equivalently, \(u\) is reachable from
+\(v\) in both \(G\) and \(G'\).
+
+\paragraph{All Strongly Connected Components Time Complexity}
+Observe that this may require a BFS for each component, which runs in
+\(O(V + E)\). Doing so for all \(V\) vertices leads to a total of
+ \(O(V(V+E))\) time.
+
+\paragraph{Kosaraku's Algorithm}
+Kosaraju's and Tarjan's algorithm can find all strongly connected components
+in linear time as \(O(V+E)\). See this in CLRS \(\textsection 22.5\).
+
+\paragraph{Consensation Graph}
+Clearly each \(v \in  V\) exists in only one stronlgly connected component.
+That is, the strongly connected components form a partition of \(V\).
+Let \(C_G\) be the condensation graph of \(G\). That is, \[
+    \sum_G = (C_G, E^*)
+\] where,
+\[
+    E^* = \{
+        (C_{u_1}, C_{u_2}) : (u_1, u_2) \in  E, C_{u_1} \neq C_{u_2}.
+    \} 
+.\]
+The vertices of \(\sum_G\) are strongly connected components of \(G\).
+The edges of \(\sum_G\) correspend to those edges of \(G\) that are not within
+a strongly connected component with duplicated ignored.
+
+\paragraph{Returning To Tsunami Problem with Condensation Graphs}
+\begin{enumerate}
+    \item Find the condensation graph.
+        This gives a set of \italics{super tower}, for which we know what
+        others get activated. Observer that we want our super-towers to
+        be maximal.
+    \item Now need to decide what super towers to put towers on.
+        Observe that the condensation graph is a directed, acyclic and
+        anti-symmetric graph.
+\end{enumerate}
+
+\paragraph{Topological Sorting}
+Let \(G = (V, E)\) be a directed graph with \(n = |V|\).
+A topological sort of \(G\) is a linear ordering of its vertices
+\(\sigma: V \to  \{1, \ldots, n\} \) such that if there is an edge
+\(v, w \in  E\) then \(v\) preceded \( w \) in the order. That is,
+\( \sigma(v) < \sigma(w)\).
+
+Observe that this may only occur on an acylic graph, hence the need for
+the condensation graph. Also, the topological sort may not be unique.
+
+This algorithm may be done in \(O\left( V + E \right) \).
+Recall that linear algorithms like this are equivalent to reading the graph. 
+As such, they may be done \textit{for free}.
+
+
