@@ -1,5 +1,90 @@
-% \section{Network Flow Algorithms}
+\section{Network Flow Algorithms}
 
-% \subsection{Flow networks}
-% \subsection{Ford – Fulkerson algorithm and more}
-% \subsection{Applications including Maximum Bipartite Matching}
+\subsection{Flow networks}
+
+\paragraph{Definition: Flow Network}
+A flow network \( G = (V, E) \) is a directed graph where each edge
+\( e = (u, v) \in  E \) has a positive integer capacity
+\( c(u, v) > 0 \).
+
+There are two special vertices. A source \( s \) and sink  \( t \).
+There are no outgoing edges for a sink and likewise, no incoming edges
+for a source.
+
+\paragraph{Flow}
+A flow in \( G \) is a function  \( f: E \to  [0, \infty) \) such that
+\(  f(u, v) > 0 \). The function \( f \) must satisfy
+\begin{enumerate}
+  \item \textbf{Capacity Contraints:} \( f(u, v) \leq c(u, v)\), forall
+     \( e(u, v) \in  E \).
+  \item \textbf{Flow Conservation:} For all \( v \in V \backslash \{(s, t)\} \),
+    we require \[
+        \sum_{(u, v) \in  E} f(u, v) = \sum_{(v, w) \in  E}
+    .\]
+    That is, the incoming flow must be equal to the outgoing flow.
+\end{enumerate}
+
+\paragraph{Value of Flow}
+The value of flow is defined by \[
+  |f| = \sum_{v: (s, v) \in E} f(s, v)
+  =
+  \sum_{v: (v, t) \in  E} f(v, t)
+.\]
+That is, the flow leaving the source or, flow arriving at sink.
+
+\paragraph{Goal of Flow Network}
+Given a flow network, the aim is to find a flow of maximal value.
+
+\paragraph{Integrality Theorem}
+If all capacities are integers, then there exists a flow of maximum value
+such that \( f(u, v) \) is an integer for all
+edges  \( \left( u, v \right) \in  E \).
+
+\paragraph{Greedy Does not Work}
+The obvious greedy solution would be to send flow arbitrarity,
+one-unit at a time. However, this may converge to some local maximum
+that is not reflective of the true global maximum.
+
+\paragraph{Residual Flow Network}
+Given a flow network, the \textit{residual flow network} is the network
+is the network made up of the leftover capacities.
+
+\paragraph{New Edges}
+Suppoe there is en edge \( e(v, w) \) with capacity  \( c_1 \)
+and flow  \( f_1 \) units and edge \( e(w, v) \)
+with  \( c_2, f_2 \) capacity and flow respectively.
+
+The forward edge \( v \to  w \) allows \( c_1 - f_1 \)
+additional units of flow. We can also send \( f_2 \)
+units to cancel the flow to the reverse edge.
+
+Thus, we create edges \( v \to  w \) with a capacity of
+\( c_1 - f_1 + f_2 \) for the forward edge and,
+\( c_2 - f_2 + f_1 \) on the backwards edge.
+
+\paragraph{Augmenting Path}
+An \textit{augmenting path} is a path from \( s \to  t \) in the residual flow network.
+
+The capacity of an augmenting path is the capacity of its \textit{bottleneck}
+edge. That is, the edge of smallest capacity.
+
+We should then send that amount of flow along the augmenting path, recalculating
+the flow and the residual capacities for each edge used.
+
+\paragraph{Recalculating Augmented Path}
+Suppose we have an augmenting path of capaity \( f \)
+that includes an edge  \( v \to  w \). Then,
+\begin{enumerate}
+  \item Cancel up to \( f \) units of flow being sent from  \( w \to  v \)
+  \item Add the remainder of theose \( f \) units to the flow being sent
+    from  \( v \to  w \). That is, reverse the flow.
+  \item Increase the residual capacity from \( w \to  v \) by \( f \)
+    and decrease the residual capacity from  \( v \to  w \) by \( f \).
+\end{enumerate}
+
+
+
+% \subsection{Ford – Fulkerson algorithm and more} \subsection{Applications
+% including Maximum Bipartite Matching}
+
+
