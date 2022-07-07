@@ -72,7 +72,7 @@ We should then send that amount of flow along the augmenting path, recalculating
 the flow and the residual capacities for each edge used.
 
 \paragraph{Recalculating Augmented Path}
-Suppose we have an augmenting path of capaity \( f \)
+Suppose we have an augmenting path of capacity \( f \)
 that includes an edge  \( v \to  w \). Then,
 \begin{enumerate}
   \item Cancel up to \( f \) units of flow being sent from  \( w \to  v \)
@@ -82,9 +82,53 @@ that includes an edge  \( v \to  w \). Then,
     and decrease the residual capacity from  \( v \to  w \) by \( f \).
 \end{enumerate}
 
+\subsection{Ford – Fulkerson Algorithm}
+
+\paragraph{Ford - Fulkerson Method}
+\begin{enumerate}
+  \item Initialise flow \( f \) to  \( 0 \).
+  \item While there exists an augmenting path  \( p \) in the residual
+    network  \( G_f \), augment flow along  \( p \).
+  \item The final flow is  \( f \).
+\end{enumerate}
+That is, keep adding flow through augmenting paths for as long as it is possible.
+
+\paragraph{Proving Termination}
+If all capacities are integers then, each augmenting path increases the flow
+through the network by atleast one unit. However, the total flow is finite.
+It cannot be larger than the sum of all the capacities.
+
+\paragraph{Cut}
+A cut in a flow network is any partition of the vertices of the underlying
+graph into two subsets \( S \) and  \( T \) such that: 
+\begin{enumerate}
+  \item \( S \cup T = V \)
+  \item \( S \cap T = \emptyset \)
+  \item \( s \in S, t \in T \).
+\end{enumerate}
+
+\paragraph{Capacity of Cut}
+The capacity \( c(S, T) \) of a cut  \( (S, T) \)
+is the sum of capacities of all edges leaving  \( S \) and entering \( T \).
+That is, \[
+    c(S, T) = \sum_{(u, v) \in  E} \{ c(u, v) : u \in S, v \in T \} 
+.\]
 
 
-% \subsection{Ford – Fulkerson algorithm and more} \subsection{Applications
-% including Maximum Bipartite Matching}
+\paragraph{Flow of Cut}
+The flow through a cut is the net flow from the source side, to the sink side,
+\( S \to  T \).
+
+\paragraph{Lemma: Value of Flow of Cut}
+% The flow of any cut is equal to the flow of the entire network. 
+T he flow of the cut, is no more than the capacity of the cut.
+That is, \( |f| \leq c(S, T) \).
+
+
+\paragraph{Proving Maximal}
+The proof is based off the idea of a minimum cut.
+
+
+% \subsection{Applications including Maximum Bipartite Matching}
 
 
