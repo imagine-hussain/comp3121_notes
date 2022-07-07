@@ -174,7 +174,7 @@ a strongly connected component with duplicated ignored.
 \paragraph{Returning To Tsunami Problem with Condensation Graphs}
 \begin{enumerate}
     \item Find the condensation graph.
-        This gives a set of \italics{super tower}, for which we know what
+        This gives a set of \textit{super tower}, for which we know what
         others get activated. Observer that we want our super-towers to
         be maximal.
     \item Now need to decide what super towers to put towers on.
@@ -195,5 +195,132 @@ the condensation graph. Also, the topological sort may not be unique.
 This algorithm may be done in \(O\left( V + E \right) \).
 Recall that linear algorithms like this are equivalent to reading the graph. 
 As such, they may be done \textit{for free}.
+
+\subparagraph{Djikstra - Shortest Single Path}
+
+\paragraph{Algorithm Outline}
+Create a boolean array \(S\) with each index \(i\) covering if \(i\)
+has had its shortest path weight found.
+
+For each vertex \(v\) maintain a \(d_v\) equal to the weight of the
+shortest know path \(s \to v\).
+Initially \(d_s = 0\) and \(d_v = \infty\).
+
+\paragraph{Correctness}
+\subparagraph{Claim} Suppose that \(v\)is the next vextex to be added to \(S\)
+then \(d_v\) \(d_v\) is teh lenght of the shortest path from \(s\) to \(v\).
+
+TODO: Finish this off
+
+\paragraph{Notation for following}
+Let \(n = |V|, m = |E|\). Let the vertices be labelled \(1, \ldots, n\)
+with source \(n\).
+
+\subparagraph{Array Solution}
+Store \(d_i\) in array of length \(n\). At each stage
+\begin{enumerate}
+    \item Perfor linear search of \(d\) ignoring vertices already in \(S\).
+        Select vertext \(v\) with smallest \(d[v]\) to be added to \(S\).
+    \item For each outgoing edge from \(v\) to some \(z \in V \backslash S\),
+        update \(d[z]\) if necessary.]
+\end{enumerate}
+
+At each \(n\) steps, we perform a linear scan on array of length \(n\)
+and also update \(d\) in constant time at most once for each edge.
+
+Thus, the complexity is \(O(n^2 + m)\).) IN a simply graph, this can be
+simiplified to \(O(n^2)\).
+This solution is okay for dense graphs but struggles when it comes to
+sparse graphs.
+
+\paragraph{Motivation for Better Structure}
+We need to support
+\begin{enumerate}
+    \item Finding \(v\in V \backslash S\) with smallest \(d_v\)
+    \item For each outdoing edge \(w, z\) update \(d_z\) if needed.
+\end{enumerate}
+The first is a a slow linear search. However we can skip over vertices
+already in \(S\). This can be implemented by deleting theo\(d_v\)
+from the data structure all together.
+
+For this, we may use a min-heap priority queue as it has fast deletion
+and access of the minimum element. However, the standard heap doesn't
+allow updating values.
+
+\paragraph{Augmented Heap}
+The heap may be represented as an array of size \(n\) wwhere the left child
+of \(A[j]\) is stored in \(A[2j]\) and the right child in \(A[2j + 1]\).
+
+Changing \(d[i]\) is now \(O\log n\). It requires a lookup of ]
+TODO::w
+
+\subsection{Minimum Spanning Trees}
+
+\paragraph{Definition}
+A minimum spanning tree (mst) \(T\) of a connexted graph is a sub-graph
+of \(G\) which is a tree that contains all vertices of \(G\) and minimises
+the sum of all edges.
+
+\paragraph{Lemma}
+Let \(S\) be a non-empty proper subsert of all vertices of \(G\).
+Assume that \(e = (u, v)\) is an ege such that \(u \in S\)
+and \(V \not\in S\) and \(e\) is of minimal length of all edges with this
+property. Then, \(e\) must belong in all msts of \(G\).
+
+\paragraph{Kruskal's Algorithm}
+Sort all the edges \(E\) in increasing order by weight.
+Then, starting from lowest weight to highest, if adding an edge will
+not result in a cycle, then add it to the graph. Otherwise, discard the edge
+and return it.
+
+\paragraph{Uniqueness of Kruskal}
+Consider where all weights are distinctive. Consider edge \(e = (u, v)\)
+add during Kruskal's algorithmn and let \(F\) be the forest in its state before
+adding \(e\)..
+
+let \(S\) be the set of vertices reachable from \(u \in F\). Then clearly
+\(u \in S, v\not\in S\).
+
+The original grpah does not contain any edges shorter than \(e\) with one ending
+in \(S\) and the other not in \(S\). If it existed, then it would have
+already been added in during and earlier iteration of the algorithm.
+
+\paragraph{Implementing}
+The sorting is a solved problem. However, finding cycles is more difficult.
+For this, we use a union-find.
+
+\paragraph{Union-find}
+The unino-find handles disjoint sets and has atleast the following operations.
+\begin{enumerate}
+    \item Creation of the set returns a sstructure where all vertices are placed into distinct singleton sets.
+    \item Find: Returns the label of the set to which the given element belongs. Returns in \(O(1)\)
+    \item Union: Takes two sets and merges them toghether into the union of the sets.
+        Takes linear time but, by amortized analysis we see that the first \(k\) operations run in a total of \(O(k\log k\).
+        Note that this it NOT equivalent to an average case analysis but rather, the worst-case of an aggregate of operations.
+\end{enumerate}
+
+\paragraph{Additional Data Structures}
+The simiplest union-find requires
+\begin{enumerate}
+    \item An array \(A\) such that \(A[i] = j\) means that \(i\) belongs
+        to the set with represtative \(j\).]
+    \item Array \(B\) where \(B[i]\) contains the number of elements in the set]
+        with represtative \(i\).
+    \item Array \(L\) where \(L[i]\) contains poitners to the head and tail of a linked list
+        containing elements of the set with represtative \(i\).
+\end{enumerate}
+
+\paragraph{Union-Find}
+Given sets \(I, J\) with represtatives \(i, j\), the union is as follows:
+\begin{enumerate}
+    \item Assume \(B[i] \geq B[j]\) without loss of generality.
+    \item For each \(m \in J\) update \(A[m] = i\).
+    \item Update \(B[i] = B[i] + B[j]\).]]
+    \item Append \(L[j]\) to \(L[i]\) and replace \(L[j]\) with an empty list.
+\end{enumerate}
+
+Observe that the new \(B[i]\) is atleast twice the old value of \(B[j]\) since
+\(B[i] \geq B[j]\). That is, the number of elements in \(B[A[m]]\) changes, it
+
 
 
