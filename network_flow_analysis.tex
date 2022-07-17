@@ -128,11 +128,82 @@ That is, \( |f| \leq c(S, T) \).
 The maximual amount of flow in a flow network is equal to the capacity of the
 cut of minimal capacity.
 
+\paragraph{Time Complexity: Ford Fulkerson}
+The number of augmenting paths can be up to the value of the max flow \(|f|\).
+Each augmenting path takes \(O(V + R)\) (by a DFS).
+In any sensibly flow network, \(V \leq E + 1\), so we may shorten
+this as \(O(E)\). If this was not the case, we would have isolated vertices,
+which are redundant.
 
-\paragraph{Proving Maximal}
-The proof is based off the idea of a minimum cut and the 
+Therefore, the total time comlexity is \(O(E|f|)\).
 
+\subparagraph{The Capacity Issue}
+Suppose that all capacities are \(\leq C\). Then, the length
+of the input (the bits required to encode it) is \(V + E\log C\).
+However, the value of the maximum flow can be as large as \(VC\). 
+Therefore, \(O(E|f|)\) can be exponential. This is very cringe.
+
+\subsection{Speeding Up Max Flow}
+
+\paragraph{Edmonds-Karp Algorithm}
+This algorithm improves upon the Ford-Fulkerson algorithm by using a
+BFS instead, to find the augmenting path.
+That is, it chooses the augmenting path consisting of the fewest edges.
+
+At each step, we find next augmenting path in \(O(V + E) = O(E)\).
+However, choosing paths on length may lead to prioritising edges with
+small edge length, before edges with large capacity. This does not matter.
+
+See CLRS  for a proof that the number of augmenting paths is \(EV\).
+Thus, the total time complexity is \(O(VE^2)\).
+
+\paragraph{Faster Algorithms}
+Dinic's algorithm is faster as it can be done in \(O(V^2E)\) and
+Preflow-Push in \(O(V^3)\). However, this are not allowed within
+the context of this course.
+
+\paragraph{Note on Practicality}
+In practice, max-flow algorithms based on augmenting paths will run
+alot better on average, than the worst-case complexity.
+
+% \paragraph{Proving Maximal}
+% Trivially, the max flow is less than or equal to the flow of the min-cut.
+  % The difficulty is proving that the flow is equal.
+%
+% We can split the graph into a sink \(T\) and source \(T\) side.
+% We claim that all the edges from \(S\to T\) are fully occupied
+% with the flow andf, the edges from  \(T \to  S\) are empty.
+% This must be true once, the Ford-Fulkerson algorithm is compute.
+%
 
 % \subsection{Applications including Maximum Bipartite Matching}
+\subsection{Strategies for Alternative Max Flow Problems}
+
+\paragraph{Networks with Multiple Sources}
+If there are multiple sources and sinks, the problem is reducible by
+adding a \textit{super-sink} and \textit{super-sink} to the network
+where the super-source is connected to all sources with an edge of infinite
+capacity. Likewike, all the sinks connect to the super-sink with infinite
+capacity.
+
+\paragraph{Networks with Vertex Capacities}
+Suppose that each vertex \(v_i\) has a capcity \(C(v_i)\) which limits the total
+throughput of the flow coming in and out of the vertex.
+That is, \[
+  \sum_{e(u, v) \in E} c(u, v) = \sum_{e(v, w)\in E}f(v, w) \leq C(v)
+.\] 
+This can be handled by placing an edge which bottlenecks the flow in and out of
+the vertex, by splitting the vertex \(v\) into  \(v_{\mathrm{in}}, v_{\mathrm{out}}\).
+
+Then, attach all of \(v\)'s incoming edges to \(v_{\mathrm{in}}\) and all of
+its out going edges from  \(v_{\mathrm{out}}\).
+Then, create an edge to connect  \(v_{\mathrm{in}}, v_{\mathrm{out}}\) such that  \[
+  e^*(v_{\mathrm{in}}, v_{\mathrm{out}}) = C(v)
+.\] 
+
+\subsection{Max Flow Application: Movie Rental}
+
+\paragraph{Problem}
+Suppose that you have \(k\) movies with  \(m_i\) copies of the \(i\)-th 
 
 
