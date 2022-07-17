@@ -204,6 +204,49 @@ Then, create an edge to connect  \(v_{\mathrm{in}}, v_{\mathrm{out}}\) such that
 \subsection{Max Flow Application: Movie Rental}
 
 \paragraph{Problem}
-Suppose that you have \(k\) movies with  \(m_i\) copies of the \(i\)-th 
+Suppose that you have \(k\) movies with  \(m_i\) copies of the \(i\)-th movie.
+There are also \(n\) customers who all have a subset of the  \(k\)
+movies they want to see. However, each customer can only see up to \(5\) 
+movies at a time.
 
+The task is ot design an algorithm running in polynomial time of \(n\) and
+\(k\) that dispatches the largest number of movies.
 
+\paragraph{Creating a Flow Network}
+Construct a flow network with a super-source \(s\) and super-sink \(t\).
+Also add the following:
+\begin{enumerate}
+  \item A vertex \(u_i\) for  each \(i\)-th customer.
+  \item A vertex \(v_j\) for each  \(j\)-th movie.
+  \item For all \(i\) customers, an edge from \(s\) to \(u_i\) with capacity \(5\).
+  \item For all  customers, \(i\),  for all movies \(j\) that they want to see,
+    create and edge  \(u_i \to  v_j\) with capacity \(1\).
+  \item For each movie \(j\), an edge from \(v_j\) to \(t\) with capacity \(m_j\).
+\end{enumerate}
+
+\paragraph{Interperting the Flow Network}
+Any path in this network from \(s \to t\) will be of the form
+\(s \to u \to v \to t\).
+Each edge \(u \to v\) has capacity \(1\). This can be thought of
+as a customer \(u\) loaning a movie \(v\).
+
+Observe that the flows exhibit preference and as such, each customer will
+only rent movies they want to see.
+
+By \underline{flow-conservation}, the amount sent along
+\(s \to u\) is equal to the flow from \(u\) to all \(v\).
+Thus, the capacity constraint ensures that this doesn't exceed \(5\).
+Similarly, no more than \(m_j\) of each movie is rented out.
+
+\paragraph{Time Complexity}
+Recall that Edmonds-Karp can find edges in \(O(VE^2)\) time.
+We have  \(n + k + 2\) vertices and up to \(nk + n + k\) edges.
+Therefore, as required, the total time complexity is in
+polynomial time  \[
+  O(\left( n + k + 2 \right) \left( nk + n + k \right)^2) \leq O(n^3k^3)
+.\] 
+
+However, recall that Ford-Fulkerson can find max flow in \(E|f|\) time,
+and the max flow is \(5n\), this problem can be solved in \[
+  O(E|f|) = O(n(nk + n + k)) = O(n^2k)
+.\] 
