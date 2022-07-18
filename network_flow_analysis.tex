@@ -201,7 +201,9 @@ Then, create an edge to connect  \(v_{\mathrm{in}}, v_{\mathrm{out}}\) such that
   e^*(v_{\mathrm{in}}, v_{\mathrm{out}}) = C(v)
 .\] 
 
-\subsection{Max Flow Application: Movie Rental}
+\subsection{Applications of Max Flow Problems}
+
+\subsubsection{Max Flow Application: Movie Rental}
 
 \paragraph{Problem}
 Suppose that you have \(k\) movies with  \(m_i\) copies of the \(i\)-th movie.
@@ -250,3 +252,133 @@ However, recall that Ford-Fulkerson can find max flow in \(E|f|\) time,
 and the max flow is \(5n\), this problem can be solved in \[
   O(E|f|) = O(n(nk + n + k)) = O(n^2k)
 .\] 
+
+\subsubsection{Flow Application: Cargo Allocation}
+
+\paragraph{Problem}
+The storage of a ship is in the form of a rectangular grid of cells with
+\(n\) rows and  \(m\) columns. Some of the cells are supported with pillars
+and cannot be used for storage and as such, have zero capacity.
+
+Every cell in row \(i\) and column  \(j\) has a capacity of \(C(i, j)\).
+The capacity of the total weight of each row \(i\) must not exceed
+\(C_r(i)\). Similarly, the capacity of the weight of any colum \(j\) must
+exceed \(C_c(j)\).
+
+\subparagraph{Task}
+Design an algorithm in polynomial time of \(n\) and \(m\) that allocates
+the maximum possible weight of cargo to the ship without violating capacity.
+
+\paragraph{Flow Network}
+Construct a flow network with a source \(s\) and sink  \(t\).
+Also add the following:
+\begin{enumerate}
+  \item A vertex \(r_i\) for each row  \(i\),
+  \item A vertex  \(c_j\) for each column \(j\),
+  \item An edge \(s \to v_i\), \(\forall i\),
+  \item For each cell \(c_{i, j}\) that is not a pillar, an edge
+    \(r_i \to c_j \) with capacity \(C(i, j)\).
+  \item An edge from \(c_j \to  t\) with capacity \(C_c(j)\), for all \(j\).
+\end{enumerate}
+
+\paragraph{Interperting the Flow Network}
+Consider a flow path \(s \to  t\).
+For some \(i, j\), this path traverses through with form \[
+  s \to r_i \to c_j \to t
+.\] 
+The value of this flow can be thought of as the weight of the cargo
+on cell \(i, j\).
+The capacity of edge \(s \to  r_i\) ensures non-violation of the row,
+while \(c_j \to  t\)'s capacity ensures non-violation of the column capacity.
+Finally, the weight of \(r_i \to  c_j\) will be to avoid violation
+of the cell's capacity.
+
+\subsubsection{Disjoint Paths}
+
+\paragraph{Problem}
+Given a directed \(G\) with \(n\) vertices and \(m\) edges.
+\(r\) of the vertices are painted red,  \(b\) are blue and
+the remaining  \(n - r - b\) are black. Red vertices
+have only outgoing edges, while blue vertices have only incoming edges.
+
+\paragraph{Task}
+Design an algorithm in polynomial time of \(n\) and \(m\)
+to determine the largest possible number of vertex-disjoint
+(non-intersecting) paths in this graph that starts
+at a red vertex and finishes at a blue vertex.
+
+\paragraph{Flow Network}
+Trivially, the red-vertices are sources and the blue-vertices are sinks.
+As such, we apply the super-source and super-sink to the flow network.
+Also,
+\begin{enumerate}
+  \item For all black vertices \(v\), create a vertex
+    \(v_{\mathrm{in}}, v_{\mathrm{out}}\), joined by an edge of capacity 1.
+    The capacity ensures no vertex is used twice.
+  \item Each edge of the original graph \(u \to  v\) becomes an edge
+    \(u_{\mathrm{in}} \to v_{\mathrm{out}}\) with capacity 1.
+\end{enumerate}
+
+\subsubsection{Bipartite Matching}
+
+\paragraph{Problem}
+A bipartite grpah is one where vertices can be seperated into two disjoint sets such that
+no two vertices in the saim set are adjacent.
+The number of matching pairs in a maximum matching, may be referred to as the size
+of this graph.
+
+\paragraph{Conversion to Max Flow}
+Let \(A, B\) be the two disjoint sets of  \(G\).
+Create vertices \(s, t\) as source and sink. Then,
+ \begin{enumerate}
+  \item Create an edge from \(s \to  u, \forall u \in A\) with capacity 1.
+  \item Create an edge from \(s \to  v, \forall u \in B\) with capacity 1.
+  \item Orient existing edges from \(A \to B\).
+    That is, \(\forall e(u, v)\), create that edge in the flow graph.
+\end{enumerate}
+
+Recall that for all \(e(v, w)\) in the flow network with capacity
+\(c\) that carries  \(f\) units of flow, we record two edges
+in the residual graph.
+That is, the edges:
+\begin{itemize}
+  \item An edge \(v \to  w\) with capacity \(c - f\),
+  \item An edge \(v \to w\) with capacity \(f\).
+\end{itemize}
+Since all capacities are \(1\), we only denote the direction
+of the edge in the residual graph.
+
+\subsubsection{Job Center Problem}
+
+\paragraph{Problem}
+There are \(k\) recognised qualifications.
+\(n\) unemployed people hold at most \(k\) of these qualifications.
+There are also  \(m\) job openings that require a subset of these qualifications.
+
+\subparagraph{Task}
+Design a problem in polynomial time of \(n, m, k\) that allocates as many
+people as possible to the job openings for which they are qualified.
+Workers take at most  one job. Each job employs at most one worker.
+
+\paragraph{Creating The Graph}
+Create an unweighted, undirected graph with vertices
+\(a_1, \ldots, a_n\) and \(b_1, \ldots, b_m\), that represent each worker
+and job respectively.
+
+Create an edge \(a_i \to  b_j, forall i, j\), if the worker \(a_i\) is
+qualified for job \(b_j\). 
+
+The resultant graph is bipartite and the problem is reduces to a
+maximum matching problem for a bipartite graph.
+
+\paragraph{Time Complexity}
+For all \(n\) workers, we need to iterate up to \(k\) qualifications
+for all \(m\) jobs. Thus, creation of the graph can be done in
+\(O(nmk)\) time.
+
+Recall that the tightest bound is of form \(O(E|f|)\).
+Consider that \[
+  E \leq nm + n + m, \text{ and } |f| \leq \min(n, m)
+.\]
+Thus, the total time complexity is \(O(nm(k + \min(m, n)))\),
+in polynomial time as required.
