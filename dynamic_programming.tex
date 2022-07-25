@@ -287,6 +287,105 @@ The final solution is just \(\opt(C, n)\).
 Each problem can be solved in constant time and, there are \(O(nC)\)
 subproblems. Thus the overall time complexity is  \(O(nC)\)
 
+\subsection{Balanced Partition}
+
+\paragraph{Problem}
+The input is a set of \(n\) positive integers  \(x_i \in  S\).
+The task is to partition these integers into two subset  \(S_1, S_2\)
+with sums \(\sum_1, \sum_2\) respectively, such that \(|\sum_1 - \sum_2|\)
+is minimised.
+
+\paragraph{Reframing the Condition}
+Without loss of generatlity, assume \(\sum_1 \geq \sum_2\) and let
+\(\sum\) be the sum of all elements in the set. Then, \[
+  \sum_1 + \sum_2 = \sum
+.\] 
+As such, it follows \[
+  \sum_1 - \sum_2 = 2\left( \frac{\sum}{2} - \sum_2 \right)
+.\] 
+That is, we want to find a subset \(S_2\) with a sum as close to \(\frac{\sum}{2}\) as possible,
+without exceeding it.
+
+\paragraph{Reframing as Knapsack}
+For all \(x_i \in  S\), create an item with both weight and value equal to
+\(x_i\).
+Consider the knapsack problem (with no duplicates) as specified as above
+with capacity of \(\frac{\sum}{2}\).
+
+All items that are put in this knapsack can be used as \(S_1\)
+while the remaining items can be a part of \(S_2\).
+
+\subsection{Multiplying Chains of Matrices}
+
+\paragraph{Matrix Multiplication}
+The product of any two matrices \(A, B\)  \(AB\) exists if the number of
+columns in \(A\) is equal to the number of rows of  \(B\).
+If \(A\) is  \(m \times n\) and  \(B\) is  \(n\times p\)
+then,  \(AB\) is  \(m\times p\).
+
+Each element of \(AB\) \(ab_{i, j}\) is dot product of the \(i\)-th row of \(A\)
+with the  \(j\)-th column of \(B\).
+Hence, a naive solution would hvae \(m \times n \times p\) multiplications.
+
+The order in which matrices are multiplied can drastically change the amount of
+multiplications required.
+
+\paragraph{Problem}
+The input is a sequence of matrices \(A_1, A_2, \ldots, A_n\) where
+\(A_i\) is of dimension  \(s_{i - 1} \times S_i\).
+
+The task is to find the order of multiplication that minimises the number of
+multiplications required.
+
+\paragraph{Brute Force}
+The brute force solution is of form \(\Omega(2^n)\).
+The number of groupings \(T(n)\) is called the Catalan numbers.
+
+\paragraph{Dynamic Approach}
+There are many redundancies in the brute force approach as many of the same
+prefixes are solved more than once.
+
+A natural place to start, is just solve for the prefixes. However, this is not enough.
+We need to solve for all contiguous subsequences \(A_{i + 1}, \ldots, A_j\).
+
+\paragraph{Recurrences}
+The recurrence will consider all of the possible ways to place the outermost
+multiplication, splitting the chain into the product of elements
+\((A_{i + 1}, \ldots A_k)(A_{k + 1}, \ldots, A_j)\).
+We assume that we have solved the shortest way to multiply the sequence on the
+left and, on the right.
+
+The base-case is for a subsequence of length one where no multiplications are
+required.
+
+\paragraph{Notation for the Subproblems}
+Let \(P(i, j)\) be the problem of determining \(\opt(i, j)\), which is the fewest
+multiplications needed to compute the product \(A_{i + 1} \times , \ldots , A_j\).
+Then, for all \(j - 1 > i\),  \[
+  \opt(i,j) = \min \{
+    \opt(i, k) + s_i s_k s_j + \opt(k, j): i < k < j
+  \} 
+.\] 
+
+\paragraph{Order Matters}
+Solving \(P(i, j)\) requires solving  \(P(i, k)\) and \(P(k, j)\) for all  \(i < k < j\).
+This is guaranteed if, we solve in order of chain length.
+
+\paragraph{Final Solution and Time Complexity}
+The overall solution is \(\opt (0, n)\).
+There are \(O(n^2)\) subproblems. Each of these requires \(O(n)\)
+checks to find the best point of split. Thus, the time complexity is
+\(O(n^3)\) as an upper bound.
+
+However, there are many short chains and, very few short chains and,
+the time complexity can be theoretically tightened. This is left as
+an exercise to the reader.
+
+
+\paragraph{Finding Actual Bracketing}
+To find the actual location of brackets, we need to record the splitting point
+that is used to obtain it. Then, we can just backtrack from the final solution.
+
 
 % \subsection{Assembly line scheduling}
 % \subsection{Multiplying chains of matrices}
