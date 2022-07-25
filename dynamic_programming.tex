@@ -140,7 +140,154 @@ To find the largest sequence, we wish not just to store \(t(i)\) with
 each  \(P(i)\) but, also the predecessor \(j\) where \(P(i)\)
 extends  \(P(j)\).
 
-% \subsection{Making change}
+\subsection{Making change}
+\paragraph{Problem}
+You are given \(n\) types of coin denominations of integer values \[
+  \{v_i\}_{i=1}^n, \text{ where } v_1 < v_2, \ldots, < v_n
+.\] 
+Suppose \(v_1 = 1\) and there is an unlimited amount of each \(v_i\).
+This allows for it to always be possible to create change. 
+
+\paragraph{Task}
+Make change for a given integer amount \(C\), with the minimal number of coins.
+
+\paragraph{Greedy Setup: Works}
+Greedily take as many coins of the largest possible denomination \(v_n\)
+that is possible. Then, do the same for \(v_{n - 1}\) and so on.
+
+This approach works for all real-world currencies but, not for all sequences.
+Consider the denominations \(\{1, 10, 15\}\) with \(C = 20\). Greedy would choose
+ \(\{15, 1, 1, 1, 1, 1\} \) but the optimal is \(\{10, 10\}\).
+
+\paragraph{Subproblem}
+We will work in a bottom-up direction, finding the optimal solution for all
+values up to \(C\).
+
+\paragraph{Solving a Subproblem}
+Suppose that we have found the solutions for all amounts \(j < i\)
+and want to find a solution for \(i\).
+
+Consider all coins \(v_k\) that are a part of the solution for amount \(i\).
+Make up the remaining amount \(i - v_k\) with the previously computed optimal solution.
+
+Of all the optimal solutions (being computed recursively), find the pick the one that uses
+the fewest number of coins.
+
+Suppose that we choose the coin \(m\). The optimal solution  \(P(i)\) is found
+by adding a coin of denomination  \(v_m\) to  \(P(i - v_m)\).
+
+\paragraph{Base Case}
+Suppose that \(C = 0\). Then trivially, the solution has no coins.
+
+\paragraph{Time Complexity}
+Each of the \(C\) subproblems can be solved in \(O(n)\) time. As such, the time complexity
+is just  \(O(nC)\).
+This is \textit{not} polynomial time in terms of \(m\), as \(C\) may be unrestricted.
+
+\paragraph{Proving Optimal Solution}
+Consider an optimal solution for some \(i\).
+Suppose this contains a coin of denomination  \(v_m\), for some  \(1 \leq m \leq n\).
+Remobving this coin must leave an optimal solution for \(i - v_m\) by the
+same cut and paste argument.
+
+By consider all coins (of value up to \(i\)), we can pick an \(m\)
+for which the optimal solution  \(i - v_m\) uses the fewest coins.
+
+\paragraph{Finding Combinations of Coins}
+If the solution also finding what combination of coins is used, then each
+\(P(i)\) should also store with it, a pointer to  \(\pred(i)\), which is
+the optimal solution for \(i - v_k\), alongside the value of  \(v_k\).
+
+Then, when answering the question, we can just do a backtrace.
+
+\paragraph{Notation}
+A \(k\) that minimises \(P(i  - v_k)\) is denoted as \[
+  \argmin \opt(i - v_k)
+.\] 
+
+\subsection{Knapsack Problem}
+
+\subsubsection{Knapsack: Duplicates Allowed}
+\paragraph{Problem}
+There are \(n\) items. All items of kind  \(i\) are identical with weight  \(w_i\).
+All weights are integers. We can take any number of items of each kind,
+to fill a Knapsack of capacity \(C\).
+
+The task is to choose a combination of items of maximal total capacity,
+which fit the capacity of the Knapsack.
+
+\paragraph{Subproblem}
+The problem is effectively  a reflavoured version of the \underline{making change}
+problem.
+
+We assume that we have solved the problem for all \(j < i\). Call this value \(P(j)\).
+Then, consider all item types where the \(k\)-th element has a weight
+\(w_k\). If we add this item, then the rest of the bag can be
+fixed with  an allocation matching the optimal solution for \(i - w_k\).
+Choose the \(m\) that maximises the total value of \(P(i - w_m)\).
+Then, the optimal solution for \(i\) is \(w_m + P(i - w_m)\).
+
+There is a base case where \(\opt(0) = 0\).
+
+\paragraph{Time Complexity}
+There are up to \(C\) subproblems, each of which can be solved in \(O(n)\) time.
+As such, the total overall time is  \(O(nC)\). Again, this is not polynomial in terms
+of the length of the input.
+
+\subsubsection{Knapsack: Duplicates Allowed}
+
+\paragraph{Flaws in Previous Algorithm}
+The previous algorithmn is not able to discern if a value \(v_k\) has already been used.
+This breaks the rule of duplicates allowed.
+
+\paragraph{Storing Values is not Enough}
+Suppose that we follow the previous approach but store the values of what \(v_k\)
+was used at that step. This is not enough. There are two main issues:
+\begin{enumerate}
+  \item The optimal soltion for \(i - w_k\) is not necessarily unique.
+    Thus, we may record some set of items, including  \(k\) when, an equal selection of
+    items is possible without \(k\). 
+  \item Even if all optimal solutions for \(i - w_k\) use  \(k\), its still possible that
+    there is a suboptimal solution for \(i - w_k\) that does not use \(k\).
+\end{enumerate}
+The reason that this fails is due to the lack of the \underline{optimal substructure property}.
+
+\paragraph{New Way to Solve Subproblem}
+For all total weights \(i\), find the optimal solution using only the first \(k\) items.
+Then,
+\begin{itemize}
+  \item If \(k\) is used in the solution then, there is \(i - w_k\) weight left
+    to fill using the first \( k - 1 \) items.
+  \item If \(k\) is not used in the solution then, we must fill all  \(i\)
+    units of weight with the first  \(k - 1\) items.
+\end{itemize}
+
+\paragraph{New Subproblem}
+For \(0 \leq i \leq C\) and \(0 \leq k \leq n\), let  \(P(i, k)\) be the optimal
+solution for determining  \(\opt(i, k)\). That is, the maximum value that can be achieved
+up to  \(i\) units of weight, only using the first \(k\) items where, \(m(i, k)\) is the
+(largest) index of an item in such a collection.
+
+We have the \underline{recurrence} for \(i > 0\) and \(0 \leq k \leq n\), that  \[
+  \opt(i, k) = \max (\opt(i, k - 1), opt(i - w_k, k - 1), + v_k),
+\] with \(m(i, k) = m(i, k - 1)\) in the first case and \(k\) in the second.
+
+There is a base case with \(\opt(i, k)\) if  \(i\) or \(k\) is zero and  \(m(i, k)\)
+is undefined.
+
+\paragraph{Order Matters}
+When we get to \(P(i, k)\), there is an expectation that  \(P(i, k - 1)\)
+and  \(P(i - w_k, k - 1)\) has already been solved.
+This is guaranteed if the subproblems are solved in increasing order of \(k\)
+first and then, increasing capacity of \(i\). 
+
+\paragraph{Overall Solution and Time Complexity}
+The final solution is just \(\opt(C, n)\). 
+
+Each problem can be solved in constant time and, there are \(O(nC)\)
+subproblems. Thus the overall time complexity is  \(O(nC)\)
+
+
 % \subsection{Assembly line scheduling}
 % \subsection{Multiplying chains of matrices}
 % \subsection{Longest Common Subsequence}
