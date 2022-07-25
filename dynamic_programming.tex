@@ -1,6 +1,145 @@
-% \section{Dynamic Programming Method}
+\section{Dynamic Programming Method}
 
-% \subsection{Longest Increasing Subsequence}
+\subsection{Introduction}
+\paragraph{Dynamic programming}
+Dynamic Programming is a method of solving problems that can be broken down
+into subproblems and solved recursively.
+
+\paragraph{CLRS: Four-Step Method}
+\begin{enumerate}
+  \item Characterize the structure of the optimal solution.
+  \item Recursively define the value of an optimal solution.
+  \item Compute the value of an optimal solution; typically this is done bottom-up.
+  \item Construct an optimal solution from computed information.
+\end{enumerate}
+
+\paragraph{Overlapping Subproblems Property}
+We must choose subproblems in a way such that the same subproblem
+occurs several times in the recursion tree.
+When a subproblem is solved, we store the result so that
+subsequent instances of the same subproblem can be answered by a lookup table.
+
+\paragraph{Considerations for Putting it Together}
+\begin{itemize}
+  \item Is the original problem a subproblem or a combination of subproblems.
+  \item Order that the subproblems occur in.
+  \item How many subproblems are there? How long does each take?
+\end{itemize}
+
+\subsection{Longest Increasing Subsequence}
+
+\paragraph{Problem}
+Given a sequence of \(n\) real numbers  \(A[1..n]\), find a subsequence
+(not necessarily contiguous), where the values are strictly increasing.
+
+\paragraph{Subproblem: Prefixing Lengths}
+A natural choice is, for all \(i \in [1, n]\), find the length of the
+longest increasing subsequence of \(A[1..i]\) that ends at  \(A[i]\).
+Call this \(Q(i)\).
+
+We try to solve \(Q(i)\)  by extending some sequence \(Q(j)\) for
+\( j \leq i \).
+
+We assume that we have solved for all \(j < i\). Then, look for a  \(j < i\)
+such that \(A[j] < A[i]\). Pick a sequence \(m\) to get a maximal result and
+extend it with \(A[i]\).
+
+We stop at a base case of \(i = 1\), which is the trivial case.
+
+The recurrence we define is \[
+  Q(i) = \max\{Q(j) : j < i, A[j] < A[i]\} + 1
+.\] 
+
+The longest subsequence will correspond to the largest \(Q(i)\).
+
+\paragraph{Time Complexity}
+The \(n\)-th entry may require us to look at  \(n - 1\) entries.
+We do this \(n\) times, which means the prefixing takes \(O(n^2)\)
+time in total. The final solution being extracted takes \(O(n)\) and
+is therefore negligible.
+
+\paragraph{Doing Better}
+This can be done in \(n \log n\). Finding such an algorithm is left as an
+exercise left to the reader.
+
+\paragraph{Correctness}
+We claim that truncating the optimal solution for \(Q(i)\)
+will produce an optimal solution for \(Q(m)\). 
+I can't be bothered writing out why.
+
+\paragraph{Getting Sequence Not Length}
+To get the sequence, create an array of \textit{predecessors}, \(P\).
+When finding \(Q[i]\), let  \(P[i] = j\) where  \(j\)
+is the index chosen according to the definition of \(Q[i]\).
+
+When backtracking through the array, when the max is found, start from
+the max, then follow the predecessors until one with no predecessors is found.
+
+\subsection{Actvitiy Selection}
+\paragraph{Problem}
+Input is a list of \(n\) activities with starting and finishing times  \(s_i, f_i\). 
+Find the maximal duration of a subset of activities, where no two activities
+take place at the same time.
+
+This is a variation of a problem from the greedy chapter.
+The greedy approach will not work for maximal duration.
+
+\paragraph{Setup}
+Sort the activities by their finishing times such that \[
+  f_1 \leq f_2 \leq \cdots \leq f_n
+.\] 
+
+\paragraph{Subproblem: Maximal Duration}
+Let \(P(i)\) be the subproblem of finding the duration \(t(i)\)
+of a subsequence  \(\sigma(i)\), of the first  \(i\) acitivities that
+ \begin{enumerate}
+  \item consists of non-overlapping edges,
+  \item ends with activity \(i\), 
+  \item is of maximal duration.
+\end{enumerate}
+
+\(P(i)\) is solved by appending  activity \(i\) to some sequence \[
+  t(i) = \max \{
+    t(i) : j < i, f_j < s_i
+  \}  + f_i - s_i
+.\] 
+
+There is a base case \(P(i) = f_1 - s_2\).
+
+\paragraph{Best Solution}
+The best time is \(\max(P)\).
+
+\paragraph{Time Complexity}
+\begin{enumerate}
+  \item Sorting takes \(O(n \log n)\).
+  \item We loop through \(n\) elements, searching  \(n - 1\) elements for the
+    best  \(t\) which leads to the complexity for all subproblems
+    to be \(O(n^2)\).
+  \item Finding the best \(t\) is \(O(n)\).
+\end{enumerate}
+Thus, the overall time is \(O(n^2)\).
+
+\paragraph{Proof of Correctness of Subproblem}
+Let the optimal solution for \(P(i)\) be given by \( \{k_j\}_{j=1}^m \),
+where \(k_m = i\).
+The requirement is that \(\sigma' = \{k_j\}_{1}^{m - 1}\) is optimal solution
+to \(P(k_{m - 1})\). This is proved by contradiction.
+
+Suppose that instead \(P(k_{m - 1})\) is solved by a sequence
+\(\tau'\) with a duration larger than  \(\sigma'\).
+
+Then, extend \(\tau'\) with activity  \(i\). Therefore,
+\(\tau_i\) will trivially have a larger duration than  \(\sigma'\).
+This however contradicts the assumption of \(\sigma\) as the sequence
+solving \(i\).
+Hence, the optimal solution is achieved by extending the \(P(j)\) of largest duration
+that supports extension of \(i\), where  \(j < i\).
+
+\paragraph{Sequence of Activities}
+To find the largest sequence, we wish not just to store \(t(i)\) with
+each  \(P(i)\) but, also the predecessor \(j\) where \(P(i)\)
+extends  \(P(j)\).
+
 % \subsection{Making change}
 % \subsection{Assembly line scheduling}
 % \subsection{Multiplying chains of matrices}
@@ -8,3 +147,5 @@
 % \subsection{Edit distance}
 % \subsection{Bellman – Ford algorithm}
 % \subsection{Floyd – Warshall algorithm}
+
+
