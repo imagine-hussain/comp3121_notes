@@ -606,7 +606,57 @@ each edge only gets used once. Thus, the real bound is  \(O(m)\).
 As such, we can solve in the topological order from left to right.
 
 \subsection{Assembly line scheduling}
+\paragraph{Problem}
+You are given two assembly lines, each of  \(n\) workstations. The  \(k\)-th workstation
+performs the \(k\)-th job, out of  \(n\).
 
+\begin{itemize}
+  \item To bring a new job to the start of the assembly line \(i\) takes
+    \(s_i\) units of time.
+  \item To retrieve a finished product from the end of assembly line \(i\)
+    takes  \(f_i\) units of time.
+  \item On the assembly line \(i\), the  \(k\)-th job takes  \(a_{i, k}\) 
+    units of time to complete.
+  \item To move a product from station \(k\) on assembly line  \(i\) to station
+    \(k + 1\) takes  \(t_{i, k}\) units of time.
+  \item There is no time required to continue from station \(k\) to station
+     \(k + 1\) on the same assembly line.
+\end{itemize}
+
+The task is to find the fastest way to assemble a product, switching lines
+as necessary.
+
+\paragraph{Topological Sort}
+Denote vertices \(\left( i, j \right) \) to be the \(k\)-th workstation on assembly
+line  \(i\). The problem is effectively requires finding the shortest path
+from start node to end.
+Trivially, the graph is directed and acyclic, as the product only moves
+forwards.
+
+The topological sort is trivially \[
+  \text{start}, (1, 1), (2, 1), (1, 2), (2, 2), \ldots, (1, n), (2, n), \text{end}
+.\] 
+
+Hence, we can use dynamic programming over the topological sort to
+find the shortest path.
+
+\paragraph{Time Complexity}
+There are \(2n + 2\) vertices and  \(4n\) edges. Thus, the  DP should
+take \(O(n)\) time. Compare this to dijkstra's algorithm, which takes
+\(O(n \log n)\).
+
+\paragraph{Recurrence}
+For \(i \in \{1, 2\} \) and \(1 \leq k \leq n\), let  \(P(i, k)\)
+be the problem of determining  \(\opt(i, k)\). That is, the minimal time taken to complete
+the first  \(k\) jobs, with the  \(k\)-th job being performed on assembly line \(i\).
+
+Then,
+\begin{align*}
+  \opt(1, k) &= \min( \opt(1, k - 1), \opt(2, k -1) + t_{2, k - 1} )  + a_{1, k} \\
+  \opt(2, k) &= \min( \opt(2, k - 1), \opt(2, k -1) + t_{1, k - 1} )  + a_{2, k}
+.\end{align*}
+
+The base cases are where \(\opt(1, 1) = s_1 + a_{1, 1}\) and \(\opt(2, 1 = s_{2} + a_{2, 1})\).
 
 
 % \subsection{Multiplying chains of matrices}
