@@ -386,6 +386,123 @@ an exercise to the reader.
 To find the actual location of brackets, we need to record the splitting point
 that is used to obtain it. Then, we can just backtrack from the final solution.
 
+\subsection{Longest Common Subsequence}
+
+\subsubsection{Two Sequences}
+
+\paragraph{Problem}
+Consider two subsequences \[
+  S = \langle a_1, a_2, \ldots, a_n \rangle \qquad
+  \quad \text{ and, } \quad 
+  \qquad S* = \langle b_1, b_2, \ldots, b_m \rangle
+\]
+The task is to find the longest common subsequence of \(S\) and \(S^*\).
+
+\paragraph{Subsequences}
+A subsequence \(s\) of another sequence  \(S\) is a sequence of ordered elements
+of \(S\) obtained by removing some elements of  \(S\) while preserving order.
+
+This may be used as a measure of similarity between two sequences. This can be
+particularly useful for genetic analysis.
+
+\paragraph{Prefixes}
+Consider \(S_i, S^*_j\) which are just the first \(i\) and  \(j\)
+elements of  \(S, S^*\).
+Consider the last symbol of both,  \(a_i, b_j\).
+If \(a_i = b_j = c\) then, the longest common subsequence is found
+by appending  \(c\) to the solution for  \(S_{i-1}, S^*_{j - 1}\).
+
+\paragraph{Subproblem}
+For all \(0 \leq i \leq n\) and  \(0 \leq j \leq m\), let \(P(i, j)\) be the
+subproblem of determinig  \(\opt(i, j)\). That is, the length of the longest
+common subsequence of the truncated sequences \[
+  S_i = \langle a_1, a_2, \ldots, a_i \rangle
+  \quad \text{ and, }
+  S^*_j = \langle b_1, b_2, \ldots, b_j \rangle
+.\]
+
+We have that \[
+  \opt(i, j) = \begin{cases}
+    \opt(i - 1, j - 1) + 1 & \text{ if } a_i = b_j \\
+    \max(opt(i - 1, j), opt(i, j - 1)) & \text{ if } a_i \neq b_j
+  \end{cases}
+.\] 
+The base cases are \(\opt(i, 0) = \opt(0, j) = 0\).
+
+\paragraph{Order Matters}
+Solving \(P(i, j)\) requires having solved  \(P(i, j - 1), P(i - 1, j)\).
+As such, we can proceed in a bottom up manner, by solving all
+subproblems \(P(i, 0)\), then all \(P(i, 1)\) until we reach  \(P(i, j)\).
+
+\paragraph{Overall Solution and Time Complexity}
+The overall solution is \(O(mn)\).
+There are  \(mn\) subproblems, each of which an be solved in constant time.
+
+\subsubsection{Three Sequences}
+
+\paragraph{Problem}
+Consider three sequences \(S, S^*, S'\) with elements  \(a_i, b_i, c_i\)
+of length  \(l, m, n\) respectively.
+
+\paragraph{Subproblems}
+For all \(i, j, k\) let  \(P(i, j, k)\) be the subproblem of determining
+the longest common sequence of the truncates sequences \[
+  S_i = \langle a_1, a_2, \ldots, a_i \rangle
+  \quad \text{ and, }
+  S^*_j = \langle b_1, b_2, \ldots, b_j \rangle
+  \quad \text{ and, }
+  S'_k = \langle c_1, c_2, \ldots, c_k \rangle
+\]
+
+Then, for all \(i, j, k\)  \[
+  \opt(i, j, k) = \begin{cases}
+    opt(i - 1, j - 1, k - 1) + 1 & \text{ if } a_i = b_j = c_k \\
+    \max \begin{pmatrix} 
+      \opt(i - 1, j, k),
+      \opt(i, j - 1, k),
+      \opt(i, j, k - 1)
+    \end{pmatrix}  & \text{ otherwise}.
+  \end{cases}
+.\] 
+
+\paragraph{Overall Solution and Time Complexity}
+We solve \(\opt(l, m, n)\)
+There is a total of \(lmn\) subproblems, each of which can be solved in constant time.
+The time complexity is thus \(O(lmn)\).
+
+\subsubsection{Shortest Common Supersequence}
+
+\paragraph{Problem}
+Consider two sequences \(s, s'\) with \(n, m\) elements of form  \(a_i, b_i\) 
+respectively.
+
+The task is to find a shortest common supersequence of \(S\) and \(S'\).
+That is, thne shortest possible sequuence of \(S, S'\)
+such that \(s, s'\) are subsequences of the supersequence.
+
+\paragraph{Solution}
+Find the longer common subsequence of \(s, s'\).
+Then, add back differing elements in the right places, in any arbitrary,
+compatible order.
+
+\subsection{String Matching}
+
+\paragraph{Problem}
+You are given two strings of length  \(A, B\) of length  \(n, m\).
+You can perform the following operations on the strings:
+\begin{itemize}
+  \item insert a character for cost \(c_I\),
+  \item delete a character for cost \(c_D\),
+  \item replace a character for cost \(c_R\).
+\end{itemize}
+
+\paragraph{Task}
+The task is to find the lowest cost total transformation of \(A\) into  \(B\).
+
+\paragraph{Levenshtein Distance}
+This is calculated when all costs to insert, delete and replace are equal.
+As such, the Levenshtein distance is the minimum number of operations needed.
+
 
 % \subsection{Assembly line scheduling}
 % \subsection{Multiplying chains of matrices}
