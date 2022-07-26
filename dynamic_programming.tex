@@ -658,6 +658,34 @@ Then,
 
 The base cases are where \(\opt(1, 1) = s_1 + a_{1, 1}\) and \(\opt(2, 1 = s_{2} + a_{2, 1})\).
 
+\subsection{Single Source Shortest Paths}
+
+\paragraph{Problem}
+There is a directed weighted graph \(G = (V, E)\) with edge weights  \(e\).
+Edges may have negative weight but, cycles must have positive total weight.
+Also, let  \(n = |V|, m = |E|\).
+
+Let \(s \in V\). Find the shortest path from \(s\) to all other vertices  \(t\).
+
+\paragraph{Dijkstra Fails}
+Allowing negative weights means that the greedy strategy does not work.
+Observe though, that cycles must not have negative weight. This is because
+there is otherwise no finite shortest path as it may endlessly loop over the
+cycle.
+
+\paragraph{Property: No Cycles and Uniqueness of Vertex}
+Observe that for all \(t \in V\), there exists a shortest path \(s \to  t\) without cycles.
+
+This is true as any cycles in the graph are of positive weight as as such, can
+be removed to make the weight of the path no worse.
+
+As such, it follows that all shortest paths \(s \to t\) can contain any vertex at most once
+and as such, have at most  \(n - 1\) edges.
+
+\subsubsection{Bellman-Ford}
+For all vertices \(t\), we find the weight of the shortest path  \(s \to t\)
+that consists of at \(i\) edges for all  \(i \in [1, n - 1] \in \mathbb{N}\).
+
 
 % \subsection{Multiplying chains of matrices}
 % \subsection{Longest Common Subsequence}
