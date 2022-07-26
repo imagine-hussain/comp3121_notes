@@ -503,8 +503,112 @@ The task is to find the lowest cost total transformation of \(A\) into  \(B\).
 This is calculated when all costs to insert, delete and replace are equal.
 As such, the Levenshtein distance is the minimum number of operations needed.
 
+\paragraph{Consider Prefixes}
+Consider prefixes \(A_i = A[1..i]\),  \(B_j = B[1..j]\). 
+To transform \(A_i \to B_j\), the following options exist
+\begin{itemize}
+  \item Delete \(A[i]\) and tranform  \(A[1..i-1] \to  B[1..j]\),
+  \item Transform \(A[1..i] \to  B[1..j-1]\) and append \(B[j]\)
+  \item Transform  \(A[1..i-1] \to  B[1..j - 1]\). If neccesary, replace
+    \(A[i]\) with \(B[j]\).
+\end{itemize}
+If \(i = 0\) or  \(j = 0\), we only insert or delete respectively.
 
-% \subsection{Assembly line scheduling}
+\paragraph{Subproblems}
+For all \(0 \leq i \leq n\) and \(0 \leq j \leq m\), let  \(P(i, j)\) be the
+problem of determining  \(\opt(i, j)\). That is, the minimium cost of
+transforming the squeuce \(A[1..i]\) into the sequence \(B[1..j]\).
+
+Then, \[
+  \opt(i, j) = \min \begin{cases}
+    \opt(i - 1, j) + c_D \\
+    \opt(i, j - 1) + c_I \\
+    \begin{cases}
+      \opt(i - 1, j - 1)        & \text{ if } A[i] = B[j] \\
+      \opt(i - 1, j - 1) + c_R  & \text{ if } A[i] \neq B[j] \\
+    \end{cases}
+  \end{cases}
+.\] 
+There are also base cases where \(\opt(i, 0) = ic_D\) and  \(\opt(0, j) = jC_I\). 
+
+\paragraph{Overall Solution}
+The overall solution is \(\opt(n, m)\), leading to a total of \(mn\)
+subproblems. Each subproblem can be solved in constant time. Thus, the total time complexity
+is \(O(mn)\).
+
+\subsection{Maximising an Expression}
+
+\paragraph{Problem}
+Consider a seqeunce of numbers with operations \(+, -, \times\) in between.
+
+The task is to place brackets in such a way that the resulting expression
+has maximal value.
+
+\paragraph{Link to Matrix Multiplication}
+This problem is effectively the same as the \textit{matrix chain multipliatition} problem.
+It is not just enough to solve for prefixes \(A[1..i]\) but, all subsequences.
+
+\paragraph{Cases with Operations}
+Suppose that the sequence is of form \(A \circ B\) with  \(\circ in \{+, -, \times\} \).
+We want to choose between whether \(A, B\) are maximised or minimised,
+depending on the value of \(\circ\):
+\begin{itemize}
+  \item \(\circ = +\) : \(A, B\) are maximised.
+  \item \(\circ = \times\) : \(A, B\) are maximised.
+  \item \(\circ = -\) : \(A\) is  maximised,  \(B\) is minimised.
+\end{itemize}
+Therefore, it it not enough to just care for the maximum values but, also
+the minimum values.
+
+\paragraph{Solution}
+Left as an exercise to the reader.
+
+\subsection{Shortest Path in Directed, Acyclic Graph}
+\paragraph{Notation: Direct Acyclic Graphs}
+Define a DAG to be a directed acyclic graph.
+
+\paragraph{Definition: Topological Sort}
+Recall that a \textit{topological sort} of a DAG is a ordering of vertices
+where all the edges point  \textit{left to right}.
+
+Also note that:
+\begin{itemize}
+  \item This can occur only if, the graph is acyclic.
+  \item The solution of a topological sort may not be unique.
+  \item A topological sort can be found in linear \(O(|V| + |E|)\) time.
+\end{itemize}
+
+\paragraph{Problem}
+Given a DAG \(G\), find the shortest path from \(s\) to \(t\).
+
+\paragraph{Shortest Path: Standard Approach}
+If all edge weights are positive, we can use Dijkstra's algorithm in \(O(m \log n)\).
+For directed acyclic graphs however, this may be done in \(O(n + m)\) time.
+
+\paragraph{Subproblems}
+For all \(t \in V\), let \(P(t)\) be the problem of determining  \(\opt(t)\).
+That is, the length of the shortest path from  \(s\) to  \(t\).
+
+Then, for all \(t \neq s\),  \[
+  \opt(t) = \min \{
+    \opt(v) + w(v, t) : (v, t) \in E
+  \} 
+.\] 
+The trivial base case is where \(\opt(s) = 0\).
+
+\paragraph{Overall Solution}
+The overall solution is given by \(\opt(t)\) where at each step, a predecessor must be stored.
+There are \(n\) total subproblmes. However, we only do this  for all \(m\) edges and,
+each edge only gets used once. Thus, the real bound is  \(O(m)\).
+
+\paragraph{Order of Problems}
+\(\opt(t)\) relies on solving all  \(\opt(v)\) where there is an edge from \(v\) to  \(t\).
+As such, we can solve in the topological order from left to right.
+
+\subsection{Assembly line scheduling}
+
+
+
 % \subsection{Multiplying chains of matrices}
 % \subsection{Longest Common Subsequence}
 % \subsection{Edit distance}
