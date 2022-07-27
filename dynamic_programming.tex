@@ -658,7 +658,7 @@ Then,
 
 The base cases are where \(\opt(1, 1) = s_1 + a_{1, 1}\) and \(\opt(2, 1 = s_{2} + a_{2, 1})\).
 
-\subsection{Single Source Shortest Paths}
+\subsection{Bellman-Form: Single Source Shortest Paths}
 
 \paragraph{Problem}
 There is a directed weighted graph \(G = (V, E)\) with edge weights  \(e\).
@@ -682,15 +682,107 @@ be removed to make the weight of the path no worse.
 As such, it follows that all shortest paths \(s \to t\) can contain any vertex at most once
 and as such, have at most  \(n - 1\) edges.
 
-\subsubsection{Bellman-Ford}
+\paragraph{Bellman-Ford}
 For all vertices \(t\), we find the weight of the shortest path  \(s \to t\)
 that consists of at \(i\) edges for all  \(i \in [1, n - 1] \in \mathbb{N}\).
 
+Suppose that the path is of form \[
+  p = \underbrace{s \to  \ldots \to  v}_{p'} \to  t
+.\] 
+Then, \(p'\) itself, must be the shortest path from \(s\) to \(v\),
+of at msot  \(i - 1\) edges. This is another subproblem.
 
-% \subsection{Multiplying chains of matrices}
-% \subsection{Longest Common Subsequence}
-% \subsection{Edit distance}
-% \subsection{Bellman – Ford algorithm}
-% \subsection{Floyd – Warshall algorithm}
+Obviously, there are base cases where  \(t = s\) or  \(i = 0\).
 
+\paragraph{Suproblems}
+For all \(i \in [1, n - 1] \in \mathbb{N}\), and \(t \in  V\), let \(P(i, t)\)
+be the subproblem of determing  \(\opt(i, t)\). That is, the length of
+the shortest path from  \(s\) to  \(t\), with at most  \(i\) edges.
+
+Then,  \[
+  \opt(i, t) = \min \{
+    \opt(i - 1, v) + w(v, t) : (v, t) \in E
+  \} 
+.\] 
+There are base cases where \(\opt(i, s) = 0\) and  for \(t \neq s\),  \(\opt(0, t) = \infty\).
+
+\paragraph{Solution and Time Complexity}
+The overall solution is \(\opt(n - 1, t)\).
+There are \(n\) rounds for \(i \in [1, n - 1]\). In each round,
+each edge is considered at most once. Thus, the overall complexity is  \(O(mn)\).
+
+\paragraph{Construcing the Shortest Path}
+Store a predecessor \(\pred(i, t)\) that is the immediate predeessor of vertex \(t\)
+on a shortest path from \(s\) to \(t\) of at most \(i\) edges.
+
+As such, \[
+  \pred(i, t) = \argmin_{v \in V} \{
+    \opt(i - 1, v) + w(v, t) : (v, t) \in E
+  \} 
+.\] 
+
+\paragraph{Improvements}
+As described above, the algorithmn builds a table of size \(O(n^2)\),
+where each round is a new row.
+This can be reduced to \(O(n)\). Using  \(\opt(i - 1, t)\) as a candidate for
+\(\opt(i, t)\) does not affect the recurrence. As such, we can overwrite
+the table as we go.
+
+\subsection{Floyd-Warshall: All Pair Shortest Paths}
+
+\paragraph{Problem}
+The given graph \(G = (V, E)\) has edge weights  \(w(e)\). Edges may have negative
+weight but, there are no cycles of negative total weight.
+
+The task is to find the shortest path from all vertices \(s\), to all other vertices
+\(t\).
+Let \(n = |V|, m = |E|\).
+
+
+\paragraph{The Idea}
+Label the vertices \(V = \{v_1, v_2, \ldots, v_n\} \).
+Similarly to Bellman-Ford, we want to think of the immediate vertices allowed
+on a path \(s \to t\).
+
+Let \(S\) be the set of vertices allowed as intermediate vertices.
+Initially, \(S\) is empty and, we can add \(v_1, v_2, \ldots, v_n\) one at
+a time, depending on the current vertex.
+
+\paragraph{Improving Previous Rounds}
+The shortest path from \(s \to t\) using the first \(k\) vertices
+as intermediates is an improvement is improvement on the value from
+the previous round if, there is a shorter path of form \[
+  s \to \underbrace{\cdots}_{v_1, \cdots, v_{k-1}} \to \underbrace{\cdots}_{v_1, \cdots, v_{k-1}} \to t
+.\]
+
+\paragraph{Subproblems}
+For all  \(i, j \in [1, n]\) and \(k \in [0, n]\), let \(P(i, j, k)\)
+be the problem of determining \(\opt(i, j, k)\). That is,
+the cost of the shortest path from \(v_i\) to  \(v_j\) using only
+\(v_1, \ldots v_k\)  as intermediate vertices.
+
+Then, for all \(i, j\),  \[
+  \opt(i, j, k) = \min \{
+    \opt(i, j, k - 1),
+    \opt(i, k, k - 1),
+    \opt(k, j, k - 1)
+  \} 
+.\] 
+The base case is \[
+  \opt(i, j, 0) = \begin{cases}
+    0              & \text{if } i = j, \\
+    w(i, j)        &if i \neq j, \\
+    \infty         & \text{otherwise}.
+  \end{cases}
+.\] 
+
+\paragraph{Solution and Time Complexity}
+The subproblems rely on smaller \(k\) values. As such, they should be solved
+in increasing order of  \(k\).
+
+The overall solution is given as \(\opt(i, j, n)\). All  \(O(n^3)\)
+subproblems can be done in constant time. As such, the complexity is  \(O(n^3)\).
+
+As per Bellman-Ford, the space complexity can be improve by over-writing the same table
+every round.
 
