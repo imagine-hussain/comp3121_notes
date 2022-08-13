@@ -1,5 +1,47 @@
 \section{Linear Programming}
 
+
+\subsection{Linear Programming}
+
+\paragraph{Goals}
+The goal is to minimise a \textit{objective} function that is subject to a set of constraints.
+
+\paragraph{Standard Form of Objective Function}
+Typically the objective function is given as \[
+  \sum_{j = 1}^{n} c_j x_j
+.\] 
+Without loss of generality, we can always treat this as a maximisation problem,
+by reversing the sign of the objective function when the problem requires minimisation.
+
+We assume constraints are of form \[
+  sum_{j = 1}^n a_{ij} x_{j} \leq b_i
+\]  where \(1 \leq i \leq m\), \(1 \leq j \leq n\) and \(x_j \geq 0\).
+
+\paragraph{Compaction as Vectors}
+Let \(\vec{x}\) represent a column vector \[
+  x = \begin{pmatrix} x_1 \\ \vdots \\ x_n \end{pmatrix} 
+.\] 
+
+We can define a partial ordering on vectors in \(\mathbb{R}^n\) where \(\vec{x} \leq \vec{y}\) if and only if,
+for \[
+  x_j \leq y_y \quad \forall 1 \leq j \leq n
+.\] 
+
+Then the problem can be written as a maximisation of \(\vec{c}^T \vec{x}\) subject to the
+(matrix-vector) constraints
+\begin{align*}
+  A\vec{x} &\leq b\\
+  \vec{x} &\geq 0.
+.\end{align*}
+
+\paragraph{Complexities of Solutions}
+Linear programming can be solved in polynomial time. However we usually use a derivative of the
+SIMPLEX algorithm, which has an expontial worst case but, a very efficient-
+\textit{average} case..
+
+\paragraph{Dealing with Equality Constraints in the Standard Form}
+
+
 \subsection{Food Example}
 \paragraph{Problem Context}
 Foods \(F1, \ldots, F_n\). For each \(F_i\), there exists
